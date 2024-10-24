@@ -264,5 +264,31 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // منع الإرسال الافتراضي للنموذج
+        
+            const formData = new FormData(this);
+            
+            fetch('send_email.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const responseMessage = document.getElementById('responseMessage');
+                responseMessage.textContent = data.message;
+                responseMessage.className = data.status === 'success' ? 'text-success' : 'text-danger';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const responseMessage = document.getElementById('responseMessage');
+                responseMessage.textContent = 'An error occurred while sending the message.';
+                responseMessage.className = 'text-danger';
+            });
+        });
+        </script>
+
 </body>
 </html>
